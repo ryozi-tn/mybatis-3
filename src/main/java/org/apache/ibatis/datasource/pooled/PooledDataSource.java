@@ -401,9 +401,10 @@ public class PooledDataSource implements DataSource {
                   oldestActiveConnection.getRealConnection().rollback();
                 } catch (SQLException e) {
                   log.debug("Bad connection. Could not roll back");
-                }  
+                }
               }
               conn = new PooledConnection(oldestActiveConnection.getRealConnection(), this);
+              conn.setLastUsedTimestamp(0); // Requiring connection validation if set poolPingConnectionsNotUsedFor.
               oldestActiveConnection.invalidate();
               if (log.isDebugEnabled()) {
                 log.debug("Claimed overdue connection " + conn.getRealHashCode() + ".");
